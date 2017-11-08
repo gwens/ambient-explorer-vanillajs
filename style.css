@@ -13,9 +13,28 @@
       padding:20px;
     }
 
+    .email-browser {
+      display: flex;
+    }
+
+    .navigation {
+      flex: 1;
+      flex-direction: column;
+    }
+
     .search-form {
-      max-width:400px;
+      max-width:40%;
       margin:50px auto;
+      
+    }
+
+    .reader {
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      display: flex;
     }
 
     input.search {

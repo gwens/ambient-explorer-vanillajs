@@ -6,53 +6,62 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
+  <div class="email-browser">
+    <div class="navigation">
+      <form class="search-form">
+        <input type="text" class="search" placeholder="City or State">
+        <ul class="suggestions">
+          <li>Filter for a city</li>
+          <li>or a state</li>
+        </ul>
+      </form>
+    </div>
+    <div class="reader">test
+    </div>
+  </div>
+<script type="text/javascript" src="amb-1000.js"></script>
 <script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
-const cities = [];
+const emails = [];
 
-// new fetch... doesn't return the data, but returns a promise.
-fetch(endpoint)
-  .then(blob => blob.json()) // converts the raw data into JSON (can't just parse it)
-  .then(data => cities.push(...data)) // this is a spread - part of es6. If you just push data, it is pushed as a single item.
+emails.push(...data);
 
-function findMatches(wordToMatch, cities) {
-  return cities.filter(place => {
-    // figure out if the city or state matches what was searched
+function findMatches(wordToMatch, emails) {
+  return emails.filter(email => {
+    // figure out if the email subject contains the search string
     // create new regex. pass in the thing to match and the flags you want
     const regex = new RegExp(wordToMatch, 'gi'); // g = global (search the whole string); i = case insensitive
-    return place.city.match(regex) || place.state.match(regex);
+    return email.subject && email.subject.match(regex) // some subjects are blank/null
   });
 }
 
+function displayEmail(e) {
+  console.log(this.id);
+  const emailSelected = emails.find(email => email.id === this.id);
+  emailReader.innerHTML = `${emailSelected.content}`;
+}
+
 function displayMatches() {
-  const results = findMatches(this.value, cities); // this.value eturns the text string! Good to know! not easy to see if you just console.log(this)
-  console.log(results);
-  const html = results.map(place => {
+  const results = findMatches(this.value, emails); // this.value returns the text string! Good to know! not easy to see if you just console.log(this)
+  const html = results.map(email => {
     const regex = new RegExp(this.value, 'gi');
-    const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
-    const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+    const  subjectHtml = email.subject.replace(regex, `<span class="hl">${this.value}</span>`);
     return `
-      <li>
-        <span class="name">${cityName}, ${stateName}</span>
-        <span class="population">${place.population}</span>
+      <li class="email-mini" id=${email.id}>
+        <span class="subject">${subjectHtml}</span>
       </li>
     `;
   }).join(''); // map would return an array, so we join it to get one big string
 
   suggestions.innerHTML = html;
+  const emailMinis = document.querySelectorAll('.email-mini');
+  // Once the suggestions are displayed, add event listeners so we can click on them and display the relevant email
+  emailMinis.forEach(emailMini => emailMini.addEventListener('click', displayEmail));
 }
 
 const searchInput = document.querySelector('.search');
 const suggestions = document.querySelector('.suggestions');
+const emailReader = document.querySelector('.reader');
 
 searchInput.addEventListener('change', displayMatches);
 searchInput.addEventListener('keyup', displayMatches);
