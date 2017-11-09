@@ -2,31 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
+  <title>Ambient Navigator</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="email-browser">
+    <ul class="years"></ul>
+    <ul class="months">
+      <li class="month header">ALL</li>
+      <li class="month">JAN</li>
+      <li class="month">FEB</li>
+      <li class="month">MAR</li>
+      <li class="month">APR</li>
+      <li class="month">MAY</li>
+      <li class="month">JUN</li>
+      <li class="month">JUL</li>
+      <li class="month">AUG</li>
+      <li class="month">SEP</li>
+      <li class="month">OCT</li>
+      <li class="month">NOV</li>
+      <li class="month">DEC</li>
+    </ul>
     <div class="navigation">
       <form class="search-form">
-        <input type="text" class="search" placeholder="City or State">
+        <input type="text" class="search" placeholder="search me...">
         <ul class="suggestions">
-          <li>Filter for a city</li>
-          <li>or a state</li>
         </ul>
       </form>
     </div>
     <div class="reader">
-      <div class="email-header">test header</div>
-      <div class="email-body">test email body</div>
+      <ul class="email-header"></ul>
+      <div class="email-body"></div>
     </div>
   </div>
-<script type="text/javascript" src="amb-1000.js"></script>
+<script type="text/javascript" src="amb-1000.js">// importing as JS for now from local file</script>
 <script>
 
 const emails = [];
 
 emails.push(...data);
+
+function populateYears(){
+  const years = document.querySelector(".years");
+  let yearsHtml = `<li class="year header">ALL</li>`
+  for(year = 1994; year <=2017; year++){
+    yearsHtml += `<li class="year">${year}</li>`
+  }
+  years.innerHTML = yearsHtml;
+}
+
+populateYears();
 
 function findMatches(wordToMatch, emails) {
   return emails.filter(email => {
@@ -38,9 +63,14 @@ function findMatches(wordToMatch, emails) {
 }
 
 function displayEmail(e) {
-  console.log(this.id);
+  //console.log(this.id);
   const emailSelected = emails.find(email => email.id === this.id);
-  emailReader.innerHTML = `${emailSelected.content}`;
+  emailHeader.innerHTML = 
+  ` <li class="date">Date: ${emailSelected.dateString}</li>
+    <li class="sender">From: ${emailSelected.from}</li>
+    <li class="subject">Subject: ${emailSelected.subject}</li>
+  `
+  emailBody.innerHTML = `${emailSelected.content}`;
 }
 
 function displayMatches() {
@@ -50,7 +80,8 @@ function displayMatches() {
     const  subjectHtml = email.subject.replace(regex, `<span class="hl">${this.value}</span>`);
     return `
       <li class="email-mini" id=${email.id}>
-        <span class="subject">${subjectHtml}</span>
+        <div class="sender">${email.from}</div>
+        <div class="subject">${subjectHtml}</div>
       </li>
     `;
   }).join(''); // map would return an array, so we join it to get one big string
@@ -63,7 +94,9 @@ function displayMatches() {
 
 const searchInput = document.querySelector('.search');
 const suggestions = document.querySelector('.suggestions');
-const emailReader = document.querySelector('.reader');
+const emailHeader = document.querySelector('.email-header');
+const emailBody = document.querySelector('.email-body');
+
 
 searchInput.addEventListener('change', displayMatches);
 searchInput.addEventListener('keyup', displayMatches);

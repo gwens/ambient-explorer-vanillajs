@@ -1,20 +1,21 @@
     html {
       box-sizing: border-box;
-      background:#ffc600;
-      font-family:'helvetica neue';
+      background:black;
+      font-family:'courier new';
       font-size: 20px;
       font-weight: 200;
+      color: seagreen;
     }
     *, *:before, *:after {
       box-sizing: inherit;
     }
     input {
       width: 100%;
-      padding:20px;
+      padding:10px;
     }
     
     div {
-      border: 1px solid red;
+      /*border: 1px solid red;*/
       padding: 5px;
     }
 
@@ -24,83 +25,119 @@
       align-content: flex-start;
     }
 
+    .years {
+      margin: 60px 10px;
+      max-width: 60px;
+      flex-direction: column;
+      padding: 0;
+      font-family: courier;
+      text-align: right;
+      color: cadetblue;
+    }
+
+    .year.header {
+      font-weight: bold;
+    }
+
+    .year {
+      padding: 5px;
+    }
+
+    .months {
+      margin: 60px 10px;
+      max-width: 60px;
+      flex-direction: column;
+      padding: 0;
+      font-family: courier;
+      color: cadetblue;
+    }
+
+    .month.header {
+      font-weight: bold;
+    }
+
+    .month {
+      padding: 5px;
+    }
+
     .navigation {
-      flex: 1;
+      width: 300px;
       flex-direction: column;
     }
 
     .search-form {
-      max-width:40%;
-      margin:50px auto;
+      margin:50px 5px;
       
     }
 
     .reader {
-      flex: 1;
-      justify-content: top;
+      flex: 7;
       align-content: flex-start;
       display: flex;
       flex-direction: column;
     }
 
     .email-header {
-      margin: 50px;
+      margin: 60px 50px 20px 50px;
       flex-direction: column;
+      align-content: left;
+      padding: 5px;
     }
 
     .email-body {
       margin: 50px;
       flex-direction: column;
+      font-size: 14px;
     }
 
     input.search {
       margin: 0;
-      text-align: center;
+      text-align: left;
       outline:0;
-      border: 10px solid #F7F7F7;
-      width: 120%;
-      left: -10%;
+      border: 5px solid rgb(49, 2, 2);
+      width: 100%;
       position: relative;
       top: 10px;
       z-index: 2;
-      border-radius: 5px;
-      font-size: 40px;
+      font-size: 24px;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.19);
     }
 
+    input {
+      background-color: rgb(12, 2, 2);
+      color: rgb(200, 200, 200);
+      font-family: courier;
+    }
 
     .suggestions {
       margin: 0;
-      padding: 0;
+      padding: 10px 0;
       position: relative;
+      font-size: 16px;
       /*perspective:20px;*/
     }
     .suggestions li {
-      background:white;
+      background:black;
       list-style: none;
-      border-bottom: 1px solid #D8D8D8;
+      border-bottom: 2px solid rgb(13, 29, 14);
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.14);
       margin:0;
-      padding:20px;
+      padding:10px;
       transition:background 0.2s;
-      display:flex;
+      display:block;
       justify-content:space-between;
       text-transform: capitalize;
-    }
-
-    .suggestions li:nth-child(even) {
-      transform: perspective(100px) rotateX(3deg) translateY(2px) scale(1.001);
-      background: linear-gradient(to bottom,  #ffffff 0%,#EFEFEF 100%);
-    }
-    .suggestions li:nth-child(odd) {
-      transform: perspective(100px) rotateX(-3deg) translateY(3px);
-      background: linear-gradient(to top,  #ffffff 0%,#EFEFEF 100%);
-    }
-
-    span.population {
-      font-size: 15px;
+      flex-direction: row;
     }
 
     .hl {
-      background:#ffc600;
+      background: rgba(207, 226, 33, 0.274);
+    }
+
+    .sender {
+      font-weight: bold;
+    }
+
+    li {
+      list-style: none;
     }
