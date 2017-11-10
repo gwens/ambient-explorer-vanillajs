@@ -100,13 +100,14 @@ function displayMatches() {
   const results = findMatches(this.value, emails); // this.value returns the text string! Good to know! not easy to see if you just console.log(this)
   const html = results.map(email => {
     const regex = new RegExp(this.value, 'gi');
-    //const subjectHtml = email.subject.replace(regex, `<span class="hl">${this.value}</span>`);
     let subjectHtml = email.subject;
     if (subjectHtml && subjectHtml.match(regex)) { subjectHtml = email.subject.replace(regex, `<span class="hl">${this.value}</span>`)};
+    let senderHtml = email.from;
+    if (senderHtml && senderHtml.match(regex)) { senderHtml = email.from.replace(regex, `<span class="hl">${this.value}</span>`)};
     //if (senderHtml && senderHtml.match(regex)) { senderHtml.replace(regex, `<span class="hl">${this.value}</span>`)};
     return `
       <li class="email-mini" id=${email.id}>
-        <div class="sender">${email.from}</div>
+        <div class="sender">${senderHtml}</div>
         <div class="subject">${subjectHtml}</div>
       </li>
     `;
