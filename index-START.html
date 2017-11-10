@@ -108,13 +108,15 @@ function displayEmail(e) {
 }
 
 function displayMatches() {
-  const results = findMatches(this.value, emails); // this.value returns the text string! Good to know! not easy to see if you just console.log(this)
+  // Ok it was cool that this.value returned the search string, but now we want to call this from other event listeners
+  const searchString = document.querySelector('.search').value;
+  const results = findMatches(searchString, emails);
   const html = results.map(email => {
-    const regex = new RegExp(this.value, 'gi');
+    const regex = new RegExp(searchString, 'gi');
     let subjectHtml = email.subject;
-    if (subjectHtml && subjectHtml.match(regex)) { subjectHtml = email.subject.replace(regex, `<span class="hl">${this.value}</span>`)};
+    if (subjectHtml && subjectHtml.match(regex)) { subjectHtml = email.subject.replace(regex, `<span class="hl">${searchString}</span>`)};
     let senderHtml = email.from;
-    if (senderHtml && senderHtml.match(regex)) { senderHtml = email.from.replace(regex, `<span class="hl">${this.value}</span>`)};
+    if (senderHtml && senderHtml.match(regex)) { senderHtml = email.from.replace(regex, `<span class="hl">${searchString}</span>`)};
     //if (senderHtml && senderHtml.match(regex)) { senderHtml.replace(regex, `<span class="hl">${this.value}</span>`)};
     return `
       <li class="email-mini" id=${email.id}>
@@ -138,6 +140,28 @@ const emailBody = document.querySelector('.email-body');
 
 searchInput.addEventListener('change', displayMatches);
 searchInput.addEventListener('keyup', displayMatches);
+
+// Year and month filters
+
+function toggleSelected(){
+  const index = selectedYears.findIndex(year => year == this.innerText);
+  if (this.classList.contains('selected')){
+      this.classList.remove('selected');
+      selectedYears.splice(index, 1);
+    }
+    else{
+      this.classList.add('selected');
+      selectedYears.push(this.innerText);
+    }
+  console.log(selectedYears);
+  displayMatches();
+}
+
+const yearButtons = document.querySelectorAll('.year');
+// All are selected initially
+yearButtons.forEach(year => year.classList.add('selected'));
+yearButtons.forEach(year => year.addEventListener('click', toggleSelected));
+//console.log(yearButtons);
 
 </script>
   </body>
