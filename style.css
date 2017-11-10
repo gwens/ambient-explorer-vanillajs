@@ -47,16 +47,17 @@
       color:gray;
     }
 
-    .year.header {
+    .year-all.header {
       font-weight: bold;
+      padding: 5px;
     }
 
     .year {
       padding: 5px;
     }
 
-    .year.selected {
-      color: white;
+    .years .selected {
+      color: seashell;
     }
 
     .months {
@@ -68,8 +69,13 @@
       color:gray;
     }
 
-    .month.header {
+    .month-all.header {
       font-weight: bold;
+      padding: 5px;
+    }
+
+    .months .selected {
+      color: seashell;
     }
 
     .month {
@@ -105,6 +111,7 @@
       margin: 20px 50px 50px 30px;
       flex-direction: column;
       font-size: 14px;
+      color: rgb(20, 61, 38);
     }
 
     input.search {
