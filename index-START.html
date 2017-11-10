@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Ambient Navigator</title>
+  <title>Navigator</title>
   <link rel="stylesheet" href="style.css">
+  <link href="favicons/favicon.ico" rel="icon" type="image/x-icon">
 </head>
 <body>
   <div class="email-browser">
@@ -31,8 +32,11 @@
       </form>
     </div>
     <div class="reader">
-      <ul class="email-header"></ul>
-      <div class="email-body"></div>
+      <ul class="email-header">
+      </ul>
+      <div class="email-body">
+        
+      </div>
     </div>
   </div>
 <script type="text/javascript" src="amb-1000.js">// importing as JS for now from local file</script>
@@ -41,6 +45,17 @@
 const emails = [];
 
 emails.push(...data);
+
+// Set background picture size to size of viewport and listen for resize
+
+function resize(){
+  const body = document.querySelector("body");
+  body.style.height = document.documentElement.scrollHeight + "px";
+}
+resize();
+window.addEventListener('resize', resize);
+window.addEventListener('scroll', resize);
+
 
 function populateYears(){
   const years = document.querySelector(".years");
@@ -58,7 +73,9 @@ function findMatches(wordToMatch, emails) {
     // figure out if the email subject contains the search string
     // create new regex. pass in the thing to match and the flags you want
     const regex = new RegExp(wordToMatch, 'gi'); // g = global (search the whole string); i = case insensitive
-    return email.subject && email.subject.match(regex) // some subjects are blank/null
+    return ((email.subject && email.subject.match(regex)) // some subjects are blank/null
+    || (email.from && email.from.match(regex))
+    || (email.content && email.content.match(regex)));
   });
 }
 
@@ -71,13 +88,22 @@ function displayEmail(e) {
     <li class="subject">Subject: ${emailSelected.subject}</li>
   `
   emailBody.innerHTML = `${emailSelected.content}`;
+
+  // now style the li element as selected
+  const miniSelected = document.querySelector(`#${this.id}`);
+  const emailMinis = document.querySelectorAll('.email-mini');
+  emailMinis.forEach(emailMini => emailMini.classList.remove('selected'));
+  miniSelected.classList.add('selected');
 }
 
 function displayMatches() {
   const results = findMatches(this.value, emails); // this.value returns the text string! Good to know! not easy to see if you just console.log(this)
   const html = results.map(email => {
     const regex = new RegExp(this.value, 'gi');
-    const  subjectHtml = email.subject.replace(regex, `<span class="hl">${this.value}</span>`);
+    //const subjectHtml = email.subject.replace(regex, `<span class="hl">${this.value}</span>`);
+    let subjectHtml = email.subject;
+    if (subjectHtml && subjectHtml.match(regex)) { subjectHtml = email.subject.replace(regex, `<span class="hl">${this.value}</span>`)};
+    //if (senderHtml && senderHtml.match(regex)) { senderHtml.replace(regex, `<span class="hl">${this.value}</span>`)};
     return `
       <li class="email-mini" id=${email.id}>
         <div class="sender">${email.from}</div>
