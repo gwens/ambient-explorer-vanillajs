@@ -42,6 +42,9 @@
 <script type="text/javascript" src="amb-data.js">// importing as JS for now from local file</script>
 <script type="module">
 
+// Set a maximum number of search results
+const maxResults = 25;
+
 const emails = [];
 emails.push(...data);
 
@@ -82,30 +85,9 @@ function populateYears(){
 
 populateYears();
 
-function findMatchesOld(wordToMatch, emails) {
-  let results = emails.filter(email => {
-    const year = email.id.slice(4,8);
-    const month = email.id.slice(9,11);
-    // figure out if the email subject, sender or content contains the search string
-    // set search priority based on which thing matches
-    const regex = new RegExp(wordToMatch, 'gi'); // g = global (search the whole string); i = case insensitive
-    const subjectMatch = email.subject && email.subject.match(regex) ? 3 : 0 ;
-    const fromMatch = email.from && email.from.match(regex) ? 2 : 0;
-    const contentMatch = email.content && email.content.match(regex) ? 1 : 0;
-    const totalMatch = subjectMatch + fromMatch + contentMatch;
-    // NOW HOW DO I SORT THEM? possible to edit the emails while pushing them into the new results array?
-    // Or is there a different array operator? REDUCE?
-    return (totalMatch // If anything matches, totalMatch will be > 0 so it's a match
-    // Only display results in the currently selected years and months
-    && (selectedYears.indexOf(year) > -1)
-    && selectedMonths.indexOf(month) > -1);
-  });
-  return results;
-}
-
-// USE ARRAY REDUCE TO CREATE A PRIORITIZED ARRAY OF RESULTS
+// USE ARRAY REDUCE TO CREATE A PRIORITIZED ARRAY OF THE FIRST [MAXRESULTS] RESULTS
 function findMatches(wordToMatch, emails) {
-  let results = emails.reduce((accumulator, email) => {
+  let resultsAll = emails.reduce((accumulator, email) => {
     const year = email.id.slice(4,8);
     const month = email.id.slice(9,11);
     // figure out if the email subject, sender or content contains the search string
@@ -116,15 +98,17 @@ function findMatches(wordToMatch, emails) {
     const contentMatch = email.content && email.content.match(regex) ? 1 : 0;
     const totalMatch = subjectMatch + fromMatch + contentMatch;
     // If there is a match
-    if (totalMatch) {
+    if (totalMatch && (selectedYears.indexOf(year) > -1) && selectedMonths.indexOf(month) > -1) {
       // Assign a priority number and at it to the email as a property
       email.priority = totalMatch;
       // Then push the new email with priority number into the accumulator array
       accumulator.push(email);
-      console.log(email);
     }
     return accumulator;
   }, [])
+  const resultsSorted = resultsAll.sort((a,b) => a.priority > b.priority ? -1 : 1)
+  const results = resultsSorted.slice(0, maxResults);
+  console.table(results);
   return results;
 }
 
