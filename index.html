@@ -86,7 +86,7 @@ function populateYears(){
 
 populateYears();
 
-function findMatches(wordToMatch, emails) {
+/*function findMatchesOld(wordToMatch, emails) {
   let results = emails.filter(email => {
     const year = email.id.slice(4,8);
     const month = email.id.slice(9,11);
@@ -105,11 +105,11 @@ function findMatches(wordToMatch, emails) {
     }
   });
   return results;
-}
+}*/
 
 
 // USE ARRAY REDUCE TO CREATE A PRIORITIZED ARRAY OF THE FIRST [MAXRESULTS] RESULTS
-function findMatchesOld(wordToMatch, emails) {
+function findMatches(wordToMatch, emails) {
   let resultsAll = emails.reduce((accumulator, email) => {
     // If the email does not belong to the currently selected years or months, skip
     const year = email.id.slice(4,8);
